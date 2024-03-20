@@ -4,58 +4,59 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 //screens
-import Home from "./src/Home"
+import Home from "./src/Home";
 import CreateTask from "./src/CreateTask";
 import Profile from "./src/Profile";
 import Vip from "./src/Vip";
+
+import { FormProvider } from "./src/context/FormContext";
 
 const Tab = createBottomTabNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarLabel: "Home",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="CreateTask"
-          component={CreateTask}
-          options={{
-            tabBarLabel: "CreateTask",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarLabel: "Profile",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Vip"
-          component={Vip}
-          options={{
-            tabBarLabel: "Vip",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="CreateTask"
+            component={CreateTask}
+            options={{
+              tabBarLabel: "CreateTask",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="clock-plus-outline" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              tabBarLabel: "Profile",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="account-circle-outline" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Vip"
+            component={Vip}
+            options={{
+              tabBarLabel: "Vip",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="crown-outline" color={color} size={size} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
     </NavigationContainer>
   );
 }
-
