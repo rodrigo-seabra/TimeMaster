@@ -28,7 +28,6 @@ export default function FormComponent({
     pais: "",
   });
 
-
   const handleChange = (campo, valor) => {
     setFormData({
       ...formData,
@@ -168,11 +167,11 @@ const styles = StyleSheet.create({
   ContainerGlobal: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: 'center',
-    alignItems: "center"
+    justifyContent: "center",
+    alignItems: "center",
   },
   InputDiv: {
-    width: "80%",
+    width: 325,
     height: 65,
     paddingRight: 155,
     paddingTop: 32,
@@ -181,8 +180,7 @@ const styles = StyleSheet.create({
     borderColor: "rgba(0,162,255,1)",
     boxSizing: "border-box",
   },
-  containerLocal: {
-  },
+  containerLocal: {},
   InputDivRua: {
     width: 325,
     height: 65,
@@ -233,17 +231,17 @@ const styles = StyleSheet.create({
     color: "rgba(126,126,126,1)",
     fontSize: 20,
     lineHeight: 20,
-    fontWeight: '400',
+    fontWeight: "400",
   },
   containerDivisoes: {
     display: "flex",
     flexDirection: "row",
-    justifyContent: 'space-evenly',
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
-  btnSubmit:{
+  btnSubmit: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-  }
-})
+  },
+});

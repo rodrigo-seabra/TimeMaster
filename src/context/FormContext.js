@@ -1,20 +1,29 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState } from "react";
 
 const FormContext = createContext();
 
 export const useFormContext = () => {
   const context = useContext(FormContext);
   if (!context) {
-    throw new Error('useFormContext must be used within a FormProvider');
+    throw new Error("useFormContext must be used within a FormProvider");
   }
   return context;
 };
 
 export const FormProvider = ({ children }) => {
   const [formData, setFormData] = useState({
-    nome: '',
-    email: '',
-    senha: '',
+    nome: "",
+    email: "",
+    senha: "",
+    confirmSenha: "",
+    nomeEvento: "",
+    intalDate: "",
+    finalDate: "",
+    numero: "",
+    rua: "",
+    cidade: "",
+    estado: "",
+    pais: "",
   });
 
   const updateFormData = (campo, valor) => {
@@ -26,9 +35,9 @@ export const FormProvider = ({ children }) => {
 
   const resetFormData = () => {
     setFormData({
-      nome: '',
-      email: '',
-      senha: '',
+      nome: "",
+      email: "",
+      senha: "",
     });
   };
 
