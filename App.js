@@ -9,7 +9,8 @@ import CreateTask from "./src/CreateTask";
 import Profile from "./src/Profile";
 import Vip from "./src/Vip";
 
-import { FormProvider } from "./src/context/FormContext";
+//tela de login - excluir dps
+import LoginECadastro from "./src/LoginECadastro";
 
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -21,6 +22,16 @@ export default function App() {
             component={Home}
             options={{
               tabBarLabel: "Home",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="LoginECadastro"
+            component={LoginECadastro}
+            options={{
+              tabBarLabel: "LoginECadastro",
               tabBarIcon: ({ color, size }) => (
                 <MaterialCommunityIcons name="home" color={color} size={size} />
               ),

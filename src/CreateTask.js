@@ -8,17 +8,18 @@ import FormComponent from "./components/FormComponent";
 
 export default function CreateTask() {
     return (
-        <View style={styles.Container}>
-            <View>
-                <Image source={require('../assets/photos/Logo.png')} />
-            </View>
-            <FormProvider>
+        <FormProvider>
+            <View style={styles.Container}>
+                <View>
+                    <Image source={require('../assets/photos/Logo.png')} />
+                </View>
                 <FormComponent
                     style={styles.form}
                     enventWithLocal
                 />
-            </FormProvider>
-        </View>
+            </View>
+        </FormProvider>
+
     );
 }
 

@@ -39,7 +39,7 @@ export default function FormComponent({
     onSubmit(formData);
   };
   return (
-    <View>
+    <View style={styles.ContainerGlobal}>
       {mostrarNome && (
         <View style={styles.InputDiv}>
           <TextInput
@@ -165,8 +165,14 @@ export default function FormComponent({
 }
 
 const styles = StyleSheet.create({
+  ContainerGlobal: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: 'center',
+    alignItems: "center"
+  },
   InputDiv: {
-    width: "90%",
+    width: "80%",
     height: 65,
     paddingRight: 155,
     paddingTop: 32,

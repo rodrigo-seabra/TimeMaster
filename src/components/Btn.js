@@ -7,7 +7,7 @@ export default function Btn({text, onPress})
     return(
         <View>
             <TouchableOpacity style={styles.Btn} onPress={onPress}>
-                <Text>{text}</Text>
+                <Text style={styles.Login}>{text}</Text>
             </TouchableOpacity>
         </View>
     )
@@ -16,12 +16,9 @@ export default function Btn({text, onPress})
 const styles = StyleSheet.create({
     Btn: {
       marginTop: 20,
-      width: 280,
+      width: 160,
       height: 45,
-      paddingLeft: 105,
-      paddingRight: 113,
-      paddingTop: 5,
-      paddingBottom: 14,
+      paddingTop: 3,
       borderWidth: 3,
       borderColor: "rgba(0,162,255,1)",
       boxSizing: "border-box",
@@ -29,7 +26,8 @@ const styles = StyleSheet.create({
     Login: {
       color: "rgba(126,126,126,1)",
       fontSize: 20,
-      lineHeight: 20,
+      textAlign: 'center',
+      textAlignVertical: "center",
       fontWeight: '400',
     },
   })
