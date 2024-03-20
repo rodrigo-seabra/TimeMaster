@@ -14,6 +14,7 @@ import LoginECadastro from "./src/LoginECadastro";
 
 const Tab = createBottomTabNavigator();
 export default function App() {
+  
   return (
     <NavigationContainer>
         <Tab.Navigator>

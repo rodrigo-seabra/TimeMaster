@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   containerLocal: {
   },
   InputDivRua: {
-    width: "92%",
+    width: 325,
     height: 65,
     paddingTop: 32,
     paddingBottom: 10,
