@@ -1,7 +1,7 @@
 //Components do react native
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 //hooks do react
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect, useLayoutEffect, useContext } from "react";
 
 //import async storage
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,6 +9,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 //usecontext
 import { FormProvider } from "./context/FormContext";
 import FormComponent from "./components/FormComponent";
+import { UserContext } from "./context/UserContext";
 
 export default function LoginECadastro({ setLogado }) {
   //gerenciadores da aparencia das telas
@@ -18,6 +19,8 @@ export default function LoginECadastro({ setLogado }) {
 
   //erroMsg
   const [erro, setErro] = useState(false);
+
+  const {loginContexto} =  useContext(UserContext)
 
   async function RealizarLogin(formData) {
     if (formData.email == "rodrigo@1" && formData.senha == "123") {
@@ -54,7 +57,7 @@ export default function LoginECadastro({ setLogado }) {
             <View style={styles.BoxTitle}>
               <Text style={styles.title}>Login</Text>
             </View>
-            <FormComponent mostrarEmail mostrarSenha onSubmit={RealizarLogin} />
+            <FormComponent mostrarEmail mostrarSenha onSubmit={() => RealizarLogin} />
             <TouchableOpacity
               onPress={() => (setLogin(false), setCadastro(true))}
               style={styles.trocaForm}

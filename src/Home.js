@@ -3,6 +3,10 @@ import { useState, useEffect, useLayoutEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
+//recurso do celular
+import { useBatteryLevel } from 'expo-battery';
+
+
 //component para fazer uma box com gradiente
 import { LinearGradient } from "expo-linear-gradient";
 //contexto
@@ -14,7 +18,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function Home() {
   const { usuario } = useContext(UserContext)
-
+  const [bateria, setBateria] = useState()
+  const batteryLevel = useBatteryLevel();
+  useEffect(() => {
+    setBateria( (batteryLevel * 100).toFixed(0))
+  }, [batteryLevel])
   //alterando header do navigation  
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -59,12 +67,27 @@ export default function Home() {
       console.error('Erro ao remover evento:', error);
     }
   };
+
+  
   return (
     <View style={styles.globalContainer}>
+      {bateria < 20 && (
+                <LinearGradient
+                colors={[
+                  "rgba(160, 69, 69, 1)",
+                  "rgba(210, 84, 84, 1)",
+                  "rgba(221, 111, 111, 1)",
+                  "rgba(253, 153, 153, 1)",
+                ]}
+                style={styles.topTasksEfects}
+                start={{ x: 1, y: 0.5 }}
+                end={{ x: 0, y: 0.5 }}
+              ></LinearGradient>
+      )}
       <View style={styles.topTasks}>
         <Text>Bem vindo: {usuario} </Text>
         <LinearGradient
-          c
+        c
           colors={[
             "rgba(160, 69, 69, 1)",
             "rgba(210, 84, 84, 1)",
