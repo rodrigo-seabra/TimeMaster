@@ -16,6 +16,8 @@ import LoginECadastro from "./src/LoginECadastro";
 
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//provedor do user
+import UserProvider from "./src/context/UserContext";
 
 const Tab = createBottomTabNavigator();
 export default function App() {
@@ -39,49 +41,51 @@ export default function App() {
     )
   }
   return (
-    <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={Home}
-          options={{
-            tabBarLabel: "Home",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="home" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="CreateTask"
-          component={CreateTask}
-          options={{
-            tabBarLabel: "CreateTask",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="clock-plus-outline" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            tabBarLabel: "Profile",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="account-circle-outline" color={color} size={size} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name="Vip"
-          component={Vip}
-          options={{
-            tabBarLabel: "Vip",
-            tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="crown-outline" color={color} size={size} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <Tab.Navigator>
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            options={{
+              tabBarLabel: "Home",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="home" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="CreateTask"
+            component={CreateTask}
+            options={{
+              tabBarLabel: "CreateTask",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="clock-plus-outline" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Profile"
+            component={Profile}
+            options={{
+              tabBarLabel: "Profile",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="account-circle-outline" color={color} size={size} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name="Vip"
+            component={Vip}
+            options={{
+              tabBarLabel: "Vip",
+              tabBarIcon: ({ color, size }) => (
+                <MaterialCommunityIcons name="crown-outline" color={color} size={size} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 }

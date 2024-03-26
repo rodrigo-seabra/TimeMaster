@@ -37,26 +37,49 @@ export default function CreateTask() {
   //msgError
   const [erro, setErro] = useState(false)
 
+
+  // Função para obter a lista de eventos da AsyncStorage
+  const getListaDeEventos = async () => {
+    try {
+      const listaDeEventos = await AsyncStorage.getItem('listaDeEventos');
+      return listaDeEventos ? JSON.parse(listaDeEventos) : [];
+    } catch (error) {
+      console.error('Erro ao obter lista de eventos:', error);
+      return [];
+    }
+  };
+  // Função para adicionar um novo evento à lista de eventos na AsyncStorage
+  const adicionarEvento = async (novoEvento) => {
+    try {
+      // Obter a lista atual de eventos
+      let listaDeEventos = await getListaDeEventos();
+
+      // Adicionar o novo evento à lista
+      listaDeEventos.push(novoEvento);
+
+      // Salvar a lista atualizada na AsyncStorage
+      await AsyncStorage.setItem('listaDeEventos', JSON.stringify(listaDeEventos));
+
+      console.log('Evento adicionado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao adicionar evento:', error);
+    }
+  };
+
   //função de salvar task
-  async function salvarTask(formData)
-  {
-    console.log(formData.nomeEvento, formData.intalDate, formData.finalDate)
-    if ( formData.nomeEvento != "" && formData.intalDate && formData.finalDate)
-    {
+  async function salvarTask(formData) {
+    console.log(formData.nomeEvento, formData.intalDate, formData.finalDate);
+    if (formData.nomeEvento !== "" && formData.intalDate && formData.finalDate) {
       const eventObject = {
         nomeEvento: formData.nomeEvento,
         initalDate: formData.intalDate,
         finalDate: formData.finalDate,
       };
-      const eventObjectString = JSON.stringify(eventObject);
-      await AsyncStorage.setItem('evento', eventObjectString).then(() => {
-        console.log('Evento salvo com sucesso!');
-      }).catch((error) => {
-        console.error('Erro ao salvar evento:', error);
-        setErro(true)
-      });
-    }else{
-      setErro(true)
+
+      // Adicionar o evento à lista de eventos
+      await adicionarEvento(eventObject);
+    } else {
+      setErro(true);
     }
   }
 
@@ -93,7 +116,7 @@ export default function CreateTask() {
         {isEnabled ? (
           <FormComponent style={styles.form} date enventWithLocal />
         ) : (
-          <FormComponent date onSubmit={salvarTask}  />
+          <FormComponent date onSubmit={salvarTask} />
         )}
         {erro && (<Text>Ocorreu um erro!</Text>)}
       </View>

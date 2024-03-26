@@ -3,8 +3,12 @@ import { View, StyleSheet, TextInput, Text } from "react-native";
 //hooks do react
 import React, { useState } from "react";
 
+
+import { useFormContext } from "../context/FormContext";
+
 //components
 import Btn from "./Btn";
+import { FormProvider } from "../context/FormContext";
 
 export default function FormComponent({
   onSubmit,
@@ -15,29 +19,16 @@ export default function FormComponent({
   date,
   enventWithLocal,
 }) {
-  const [formData, setFormData] = useState({
-    nome: "",
-    email: "",
-    senha: "",
-    confirmSenha: "",
-    nomeEvento: "",
-    intalDate: "",
-    finalDate: "",
-    numero: "",
-    rua: "",
-    cidade: "",
-    estado: "",
-    pais: "",
-  });
+  const { formData, updateFormData } = useFormContext();
+
   const handleChange = (campo, valor) => {
-    setFormData({
-      ...formData,
-      [campo]: valor,
-    });
+    updateFormData(campo, valor);
   };
+
   const handleSubmit = () => {
     onSubmit(formData);
   };
+
   return (
     <View style={styles.ContainerGlobal}>
       {mostrarNome && (
