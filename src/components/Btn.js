@@ -1,6 +1,6 @@
 import React from "react"
-import { TouchableOpacity } from "react-native"
-import { StyleSheet, Image, Text, View, ImageBackground } from "react-native"
+//Components do react native
+import { StyleSheet, Image, Text, View, ImageBackground, TouchableOpacity } from "react-native"
 
 export default function Btn({text, onPress})
 {

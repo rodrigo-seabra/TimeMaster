@@ -1,4 +1,6 @@
+//Components do react native
 import { View, StyleSheet, TextInput, Text } from "react-native";
+//hooks do react
 import React, { useState } from "react";
 
 //components
@@ -27,7 +29,6 @@ export default function FormComponent({
     estado: "",
     pais: "",
   });
-
   const handleChange = (campo, valor) => {
     setFormData({
       ...formData,

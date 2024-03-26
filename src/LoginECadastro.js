@@ -1,56 +1,32 @@
-import { Text, View, StyleSheet, Image } from "react-native";
+//Components do react native
+import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+//hooks do react
 import { useState, useEffect, useLayoutEffect } from "react";
 
-import { useNavigation } from "@react-navigation/native";
+//import async storage
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //usecontext
 import { FormProvider } from "./context/FormContext";
 import FormComponent from "./components/FormComponent";
-import { TouchableOpacity } from "react-native";
 
-export default function LoginECadastro() {
+export default function LoginECadastro({ setLogado }) {
+  //gerenciadores da aparencia das telas
   const [cadastro, setCadastro] = useState(false);
   const [login, setLogin] = useState(true);
   const [recuperSenha, setRecuperarSenha] = useState(false);
-  const navigation = useNavigation();
 
-  function RealizarLogin(formData) {
-    console.log(formData);
+  //erroMsg
+  const [erro, setErro] = useState(false);
+
+  async function RealizarLogin(formData) {
+    if (formData.email == "rodrigo@1" && formData.senha == "123") {
+      await AsyncStorage.setItem("usuario", formData.email);
+      setLogado(true);
+    } else {
+      setErro(true);
+    }
   }
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: () => (
-        <Image
-          source={require("../assets/photos/LogoInline.png")}
-          style={{ width: 200, height: 70, marginLeft: 80 }}
-        />
-      ),
-      tabBarStyle: { display: "none" }, // Oculta a barra de navegação inferior
-    });
-  }, [navigation]);
-  // useEffect(() => {
-  //     if(cadastro)
-  //     {
-  //         navigation.setOptions({
-  //             title: 'Cadastre-se',
-  //           });
-  //     }else if (login)
-  //     {
-  //         navigation.setOptions({
-  //             title: 'Login',
-  //           });
-  //     }else if(recuperSenha)
-  //     {
-  //         navigation.setOptions({
-  //             title: 'Recuperar Senha',
-  //           });
-  //     }else{
-  //         navigation.setOptions({
-  //             title: 'Time Master',
-  //           });
-  //     }
-  //   }, [cadastro, login, recuperSenha]);
   return (
     <FormProvider>
       <View style={styles.Container}>
@@ -59,7 +35,6 @@ export default function LoginECadastro() {
             <View style={styles.BoxTitle}>
               <Text style={styles.title}>Cadastro</Text>
             </View>
-
             <FormComponent
               mostrarNome
               mostrarEmail
@@ -92,6 +67,7 @@ export default function LoginECadastro() {
             >
               <Text style={styles.TextTrocaForm}>Esqueceu a senha?</Text>
             </TouchableOpacity>
+            {erro && <Text>Dados inválidos</Text>}
           </View>
         )}
         {recuperSenha && (
@@ -100,6 +76,12 @@ export default function LoginECadastro() {
               <Text style={styles.title}>Login</Text>
             </View>
             <FormComponent mostrarEmail />
+            <TouchableOpacity
+              onPress={() => (setRecuperarSenha(false), setLogin(true))}
+              style={styles.trocaForm}
+            >
+              <Text style={styles.TextTrocaForm}>Voltar</Text>
+            </TouchableOpacity>
           </View>
         )}
       </View>
