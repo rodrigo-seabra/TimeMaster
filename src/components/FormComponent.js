@@ -2,13 +2,10 @@
 import { View, StyleSheet, TextInput, Text } from "react-native";
 //hooks do react
 import React, { useState } from "react";
-
-
+//importando o contexto de formulario
 import { useFormContext } from "../context/FormContext";
-
 //components
 import Btn from "./Btn";
-import { FormProvider } from "../context/FormContext";
 
 export default function FormComponent({
   onSubmit,

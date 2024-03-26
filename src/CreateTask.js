@@ -74,8 +74,8 @@ export default function CreateTask() {
         nomeEvento: formData.nomeEvento,
         initalDate: formData.intalDate,
         finalDate: formData.finalDate,
+        type: selectedValue,
       };
-
       // Adicionar o evento à lista de eventos
       await adicionarEvento(eventObject);
     } else {

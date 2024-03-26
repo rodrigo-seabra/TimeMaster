@@ -81,8 +81,8 @@ export default function Home() {
           </View>
           {listaDeEventos.slice(0, 2).map((evento, index) => (
             <View key={index} style={styles.evento}>
-              <Text style={styles.eventoNome}>{evento.nomeEvento}</Text>
-              <Text style={styles.eventoData}>{evento.initalDate} - {evento.finalDate}</Text>
+              <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
+              <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline"/>  {evento.initalDate} - {evento.finalDate}</Text>
               <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
                 <Text style={styles.removerButtonText}>Remover</Text>
               </TouchableOpacity>
@@ -132,8 +132,14 @@ const styles = StyleSheet.create({
   },
   eventoNome: {
     color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  tipoEvento: {
+
+    fontWeight:'normal',
+    fontStyle:'italic',
+    fontSize: 18,
   },
   eventoData: {
     color: 'white',

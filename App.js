@@ -14,30 +14,18 @@ import Profile from "./src/Profile";
 import Vip from "./src/Vip";
 import LoginECadastro from "./src/LoginECadastro";
 
-//import async storage
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 //provedor do user
 import UserProvider from "./src/context/UserContext";
 
 const Tab = createBottomTabNavigator();
 export default function App() {
   const [logado, setLogado] = useState(false)
-
-
-  async function verificaUser() {
-    const usuario = await AsyncStorage.getItem("usuario")
-    if (usuario != "") {
-      setLogado(true)
-    }
-  }
-
-  useEffect(() => {
-    verificaUser()
-  }, [])
-
   if (!logado) {
     return (
-      <LoginECadastro setLogado={setLogado} />
+      <UserProvider>
+        <LoginECadastro setLogado={setLogado} />
+      </UserProvider>
     )
   }
   return (
