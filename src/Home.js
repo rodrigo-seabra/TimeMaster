@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, TextInput,  } from "react-native";
+import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, TextInput, } from "react-native";
 import { useState, useEffect, useLayoutEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -36,7 +36,7 @@ export default function Home() {
     });
   }, [navigation]);
 
-  
+
   const [tipoEvento, setTipoEvento] = useState('');
   const [eventosFiltrados, setEventosFiltrados] = useState([]);
 
@@ -54,22 +54,32 @@ export default function Home() {
   const [listaDeEventos, setListaDeEventos] = useState([]); //array com a lista do eventos
   //exibindo os dados na tela
   useEffect(() => {
-      // Função para obter a lista de eventos da AsyncStorage
-      const getListaDeEventos = async () => {
-          try {
-              const lista = await AsyncStorage.getItem('listaDeEventos');
-              if (lista) {
-                  setListaDeEventos(JSON.parse(lista));
-              }
-          } catch (error) {
-              console.error('Erro ao obter lista de eventos:', error);
-          }
-      };
+    // Função para obter a lista de eventos da AsyncStorage
+    const getListaDeEventos = async () => {
+      try {
+        const lista = await AsyncStorage.getItem('listaDeEventos');
+        if (lista) {
+          setListaDeEventos(JSON.parse(lista));
+        }
+      } catch (error) {
+        console.error('Erro ao obter lista de eventos:', error);
+      }
+    };
 
-      // Chamar a função para obter a lista de eventos ao carregar a tela
-      getListaDeEventos();
+    // Chamar a função para obter a lista de eventos ao carregar a tela
+    getListaDeEventos();
   }, [listaDeEventos]);
-
+  const removerEvento = async (index) => {
+    try {
+      let novaListaDeEventos = [...listaDeEventos];
+      novaListaDeEventos.splice(index, 1);
+      await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
+      setListaDeEventos(novaListaDeEventos);
+      console.log('Evento removido com sucesso!');
+    } catch (error) {
+      console.error('Erro ao remover evento:', error);
+    }
+  };
   return (
     <View style={styles.globalContainer}>
       {bateria < 20 && (
@@ -78,40 +88,37 @@ export default function Home() {
       <Text>Bem vindo: {usuario} </Text>
       <TopTasks />
       <View style={styles.filtroContainer}>
-    <Text style={styles.filtroText}>Filtrar por tipo:</Text>
-    <Picker
-      style={styles.filtroPicker}
-      selectedValue={tipoEvento}
-      onValueChange={handleTipoEvento}
-    >
-      <Picker.Item label="Todos" value="" />
-      <Picker.Item label="Estudo" value="Estudo" />
-      <Picker.Item label="Urgentes" value="Urgentes" />
-      <Picker.Item label="Evento" value="Evento" />
-      <Picker.Item label="Evento em conjunto" value="Evento em conjunto" />
-    </Picker>
-  </View>
-      
-  <FlatList
-    data={eventosFiltrados}
-    keyExtractor={(item) => item.nomeEvento}
-    renderItem={({ item }) => (
-      <TouchableOpacity style={styles.listaItem}>
-        <Text style={styles.listaItemText}>{item.nomeEvento}</Text>
-      </TouchableOpacity>
-    )}
-  />
+        <Text style={styles.filtroText}>Filtrar por tipo:</Text>
+        <Picker
+          style={styles.filtroPicker}
+          selectedValue={tipoEvento}
+          onValueChange={handleTipoEvento}
+        >
+          <Picker.Item label="Todos" value="" />
+          <Picker.Item label="Estudo" value="Estudo" />
+          <Picker.Item label="Urgentes" value="Urgentes" />
+          <Picker.Item label="Evento" value="Evento" />
+          <Picker.Item label="Evento em conjunto" value="Evento em conjunto" />
+        </Picker>
+      </View>
+      <FlatList
+        data={eventosFiltrados}
+        keyExtractor={(item) => item.nomeEvento}
+        renderItem={({ item, index }) => (
+          <View>
+            <Text style={styles.eventoNome}>{item.nomeEvento} - <Text style={styles.tipoEvento}>{item.type}</Text></Text>
+            <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {item.initalDate} - {item.finalDate}</Text>
+            <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
+              <Text style={styles.removerButtonText}>Remover</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  globalContainer: {
-    width: "100%",
-    height: "100%",
-    justifyContent: "center",
-    backgroundColor: "white",
-  },
   globalContainer: {
     flex: 1,
     backgroundColor: "#fff",
@@ -120,7 +127,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   filtroContainer: {
-    marginBottom: 20,
+    margin: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
@@ -134,6 +141,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     marginRight: 10,
+    color: '#7E7E7E'
   },
   filtroPicker: {
     flex: 1,
@@ -142,7 +150,7 @@ const styles = StyleSheet.create({
   listaItem: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: "#7E7E7E",
   },
   listaItemText: {
     fontSize: 16,
