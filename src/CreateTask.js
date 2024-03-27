@@ -116,7 +116,10 @@ export default function CreateTask() {
         {isEnabled ? (
           <FormComponent style={styles.form} date enventWithLocal />
         ) : (
-          <FormComponent date onSubmit={salvarTask} />
+          <View>
+            <FormComponent date onSubmit={salvarTask} />
+          </View>
+
         )}
         {erro && (<Text>Ocorreu um erro!</Text>)}
       </View>
