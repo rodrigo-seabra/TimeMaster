@@ -35,7 +35,6 @@ export default function Home() {
       ),
     });
   }, [navigation]);
-
   //exibindo eventos vindo da async storage
   const [listaDeEventos, setListaDeEventos] = useState([]); //array com a lista do eventos
   //exibindo os dados na tela

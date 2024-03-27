@@ -22,7 +22,7 @@ export default function Routes ()
 
     const { logado } = useContext(UserContext)
 
-    if(logado == true)
+    if(logado == false)
     {
         return(<LoginECadastro/>)
     }

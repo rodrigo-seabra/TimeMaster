@@ -11,7 +11,7 @@ import { FormProvider } from "./context/FormContext";
 import FormComponent from "./components/FormComponent";
 import { UserContext } from "./context/UserContext";
 
-export default function LoginECadastro({ setLogado }) {
+export default function LoginECadastro() {
   //gerenciadores da aparencia das telas
   const [cadastro, setCadastro] = useState(false);
   const [login, setLogin] = useState(true);
@@ -20,16 +20,12 @@ export default function LoginECadastro({ setLogado }) {
   //erroMsg
   const [erro, setErro] = useState(false);
 
-  const {loginContexto} =  useContext(UserContext)
-
-  async function RealizarLogin(formData) {
-    if (formData.email == "rodrigo@1" && formData.senha == "123") {
-      await AsyncStorage.setItem("usuario", formData.email);
-      setLogado(true);
-    } else {
-      setErro(true);
-    }
+  const {RealizarLogin} =  useContext(UserContext)
+  function Login (formData)
+  {
+    RealizarLogin(formData)
   }
+
   return (
     <FormProvider>
       <View style={styles.Container}>
@@ -57,7 +53,7 @@ export default function LoginECadastro({ setLogado }) {
             <View style={styles.BoxTitle}>
               <Text style={styles.title}>Login</Text>
             </View>
-            <FormComponent mostrarEmail mostrarSenha onSubmit={() => RealizarLogin} />
+            <FormComponent mostrarEmail mostrarSenha onSubmit={Login} />
             <TouchableOpacity
               onPress={() => (setLogin(false), setCadastro(true))}
               style={styles.trocaForm}
