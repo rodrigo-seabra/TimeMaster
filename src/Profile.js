@@ -25,7 +25,7 @@ export default function Profile() {
     }, [navigation]);
     return (
         <View style={styles.globalContaine}>
-            <Text style={styles.title}>Olá : {usuario}</Text>
+            <Text style={styles.title}>Olá : {usuario.nome}</Text>
 
             <TouchableOpacity>
                 <LinearGradient

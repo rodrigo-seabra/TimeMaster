@@ -1,17 +1,16 @@
 import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, TextInput, } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+
 import { useState, useEffect, useLayoutEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 //recurso do celular
 import { useBatteryLevel } from 'expo-battery';
-//component para fazer uma box com gradiente
-import { LinearGradient } from "expo-linear-gradient";
 //contexto
 import { UserContext } from "./context/UserContext";
-
+//componentes
 import MsgError from "./components/MsgError";
 import TopTasks from "./components/TopTasks";
-import { Picker } from "@react-native-picker/picker";
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -39,6 +38,7 @@ export default function Home() {
 
   const [tipoEvento, setTipoEvento] = useState('');
   const [eventosFiltrados, setEventosFiltrados] = useState([]);
+  const [listaDeEventos, setListaDeEventos] = useState([]); //array com a lista do eventos
 
   const handleTipoEvento = (itemValue) => {
     setTipoEvento(itemValue);
@@ -51,7 +51,6 @@ export default function Home() {
       setEventosFiltrados(listaDeEventos); // Exibe todos os eventos se nenhum filtro for selecionado
     }
   };
-  const [listaDeEventos, setListaDeEventos] = useState([]); //array com a lista do eventos
   //exibindo os dados na tela
   useEffect(() => {
     // Função para obter a lista de eventos da AsyncStorage
@@ -65,7 +64,6 @@ export default function Home() {
         console.error('Erro ao obter lista de eventos:', error);
       }
     };
-
     // Chamar a função para obter a lista de eventos ao carregar a tela
     getListaDeEventos();
   }, [listaDeEventos]);
@@ -85,7 +83,7 @@ export default function Home() {
       {bateria < 20 && (
         <MsgError bateria />
       )}
-      <Text>Bem vindo: {usuario} </Text>
+      <Text>Bem vindo: {usuario.nome} </Text>
       <TopTasks />
       <View style={styles.filtroContainer}>
         <Text style={styles.filtroText}>Filtrar por tipo:</Text>
@@ -104,6 +102,7 @@ export default function Home() {
       <FlatList
         data={eventosFiltrados}
         keyExtractor={(item) => item.nomeEvento}
+        style={styles.listagem}
         renderItem={({ item, index }) => (
           <View>
             <Text style={styles.eventoNome}>{item.nomeEvento} - <Text style={styles.tipoEvento}>{item.type}</Text></Text>
@@ -154,5 +153,23 @@ const styles = StyleSheet.create({
   },
   listaItemText: {
     fontSize: 16,
+  },
+  listagem:{
+    width: 240,
+  },
+  evento: {
+    marginBottom: 10,
+    alignItems: 'center',
+  },
+  eventoNome: {
+    color: '#7E7E7E',
+    fontSize: 20,
+    fontWeight: '600',
+  },
+  tipoEvento: {
+
+    fontWeight: 'normal',
+    fontStyle: 'italic',
+    fontSize: 18,
   },
 });

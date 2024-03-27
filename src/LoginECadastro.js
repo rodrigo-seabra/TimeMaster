@@ -25,6 +25,12 @@ export default function LoginECadastro() {
   {
     RealizarLogin(formData)
   }
+  const {RealizarCadastro} = useContext(UserContext)
+  function Cadastrar(formData)
+  {
+  // Chamar a função RealizarCadastro do contexto de usuário
+  RealizarCadastro(formData);
+  }
 
   return (
     <FormProvider>
@@ -39,6 +45,7 @@ export default function LoginECadastro() {
               mostrarEmail
               mostrarConfirmarSenha
               mostrarSenha
+              onSubmit={Cadastrar}
             />
             <TouchableOpacity
               onPress={() => (setCadastro(false), setLogin(true))}
