@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 //component para fazer uma box com gradiente
@@ -23,16 +23,35 @@ export default function TopTasks() {
         };
         getListaDeEventos();
     }, [listaDeEventos]);
-
     const removerEvento = async (index) => {
         try {
             let novaListaDeEventos = [...listaDeEventos];
             novaListaDeEventos.splice(index, 1);
-            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
             setListaDeEventos(novaListaDeEventos);
-            console.log('Evento removido com sucesso!');
+            Alert.alert(
+                'Excluir',
+                'Você tem certeza que deseja excluir?',
+                [
+                    {
+                        text: 'Cancelar',
+                        onPress: () => console.log('Cancelado'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirmar',
+                        onPress: async () => {
+                            console.log('Evento removido com sucesso!');
+                            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
+                            setListaDeEventos(novaListaDeEventos);
+                            Alert.alert('Sucesso', 'Evento removido com sucesso!');
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         } catch (error) {
             console.error('Erro ao remover evento:', error);
+            alert('Erro ao remover evento:', error);
         }
     };
 
