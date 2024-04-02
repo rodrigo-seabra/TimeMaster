@@ -1,4 +1,4 @@
-import { Image, Text, View, StyleSheet, Switch, Keyboard, Platform } from "react-native";
+import { Image, Text, View, StyleSheet, Switch, Keyboard, Platform, FlatList, TouchableOpacity } from "react-native";
 import React, { useState, useLayoutEffect, useContext, useEffect } from "react";
 import * as Calendar from 'expo-calendar';
 import uuid from "react-native-uuid"
@@ -13,17 +13,12 @@ import { useFormContext } from "./context/FormContext";
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import * as Contacts from 'expo-contacts';
+import { Modal } from "react-native";
+import { Button } from "react-native";
+
+
 export default function CreateTask() {
-  const { formData, updateFormData, resetFormData } = useFormContext();
-  async function getPermission() {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    if (status === 'granted') {
-      const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
-    }
-  }
-  useEffect(() => {
-    getPermission()
-  }, [])
   //alterando a imagem do header do navigation
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -36,6 +31,17 @@ export default function CreateTask() {
       ),
     });
   }, [navigation]);
+  const { formData, updateFormData, resetFormData } = useFormContext();
+  async function getPermission() {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status === 'granted') {
+      const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+    }
+  }
+  useEffect(() => {
+    getPermission()
+  }, [])
+
   //logica do switch
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
@@ -110,23 +116,42 @@ export default function CreateTask() {
     }
 
     Keyboard.dismiss();
-      try{
-        await Calendar.createEventAsync(newCalendarID, newEvent)
-      }catch(err)
-      {
-        console.error('Erro ao adicionar evento:', error);
-      }
-      const eventObject = {
-        nomeEvento: formData.nomeEvento,
-        initalDate: formData.intalDate,
-        finalDate: formData.finalDate,
-        type: selectedValue,
-      };
-      adicionarEvento(eventObject);
-      //Limpando os campos do form:
-      resetFormData();
-      // Adicionar o evento à lista de eventos
+    try {
+      await Calendar.createEventAsync(newCalendarID, newEvent)
+    } catch (err) {
+      console.error('Erro ao adicionar evento:', error);
+    }
+    const eventObject = {
+      nomeEvento: formData.nomeEvento,
+      initalDate: formData.intalDate,
+      finalDate: formData.finalDate,
+      type: selectedValue,
+    };
+    adicionarEvento(eventObject);
+    //Limpando os campos do form:
+    resetFormData();
+    // Adicionar o evento à lista de eventos
   }
+
+  const [contatos, setContatos] = useState([]);
+  const [contatoSelecionado, setContatoSelecionado] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const buscarContatos = async () => {
+    const { status } = await Contacts.requestPermissionsAsync();
+    if (status === 'granted') {
+      const { data } = await Contacts.getContactsAsync({
+        fields: [Contacts.Fields.PhoneNumbers, Contacts.Fields.Name],
+      });
+      if (data.length > 0) {
+        setContatos(data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    buscarContatos();
+  }, []);
 
   return (
     <FormProvider>
@@ -159,16 +184,65 @@ export default function CreateTask() {
           />
         </View>
         {isEnabled ? (
-          <FormComponent style={styles.form} date enventWithLocal />
+          <View>
+            <FormComponent date enventWithLocal />
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text>Selecionar Contatos</Text>
+            </TouchableOpacity>
+            {contatoSelecionado && (
+              <Text>Contato selecionado: {contatoSelecionado.name}</Text>
+            )}
+          </View>
+        ) : selectedValue === "Evento em conjunto" ? (
+          <View>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text>Selecionar Contatos</Text>
+            </TouchableOpacity>
+            {contatoSelecionado && (
+              <Text>Contato selecionado: {contatoSelecionado.name}</Text>
+            )}
+            <FormComponent date onSubmit={salvarTask} />
+
+          </View>
         ) : (
           <View>
             <FormComponent date onSubmit={salvarTask} />
           </View>
-
         )}
         {erro && (<Text>Ocorreu um erro!</Text>)}
+
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={modalVisible}
+          onRequestClose={() => {
+            setModalVisible(false);
+          }}
+        >
+          <View>
+            <FlatList
+              data={contatos}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => {
+                  setContatoSelecionado(item);
+                  setModalVisible(false);
+                }}>
+                  <Text>{item.name}</Text>
+                </TouchableOpacity>
+              )}
+            />
+            <Button
+              title="Fechar"
+              onPress={() => {
+                setModalVisible(false);
+              }}
+            />
+          </View>
+        </Modal>
       </View>
     </FormProvider>
+
   );
 }
 

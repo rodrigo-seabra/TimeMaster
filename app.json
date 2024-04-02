@@ -25,7 +25,9 @@
     },
     "permissions": [
       "android.permission.READ_CALENDAR",
-      "android.permission.WRITE_CALENDAR"
+      "android.permission.WRITE_CALENDAR",
+      "android.permission.READ_CONTACTS",
+      "android.permission.WRITE_CONTACTS"
     ],
     "web": {
       "favicon": "./assets/favicon.png"
@@ -35,6 +37,12 @@
         "expo-calendar",
         {
           "calendarPermission": "Nosso aplicativo precisa de permissão para acessar o calendário."
+        }
+      ],
+      [
+        "expo-contacts",
+        {
+          "contactsPermission": "Allow $(PRODUCT_NAME) to access your contacts."
         }
       ]
     ]
