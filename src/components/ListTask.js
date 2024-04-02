@@ -1,6 +1,6 @@
 import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, TextInput, } from "react-native";
 import { Picker } from "@react-native-picker/picker";
-import { useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -14,8 +14,11 @@ export default function ListTask() {
         setTipoEvento(itemValue);
         if (itemValue !== '') {
             const eventosFiltrados = listaDeEventos.filter((evento) => {
+                console.log('Tipo do evento:', evento.type);
+                console.log('Item selecionado:', itemValue);
                 return evento.type.toLowerCase() === itemValue.toLowerCase();
             });
+            console.log('Eventos filtrados:', eventosFiltrados);
             setEventosFiltrados(eventosFiltrados);
         } else {
             setEventosFiltrados(listaDeEventos); // Exibe todos os eventos se nenhum filtro for selecionado
@@ -64,15 +67,15 @@ export default function ListTask() {
                     <Picker.Item label="Evento em conjunto" value="Evento em conjunto" />
                 </Picker>
             </View>
-            {listaDeEventos.map((evento, index) => (
-                    <View key={index} style={styles.evento}>
-                        <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
-                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {evento.initalDate} - {evento.finalDate}</Text>
-                        <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
-                            <Text style={styles.removerButtonText}>Remover</Text>
-                        </TouchableOpacity>
-                    </View>
-                ))}
+            {eventosFiltrados.map((evento, index) => (
+                <View key={index} style={styles.evento}>
+                    <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
+                    <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {evento.initalDate} - {evento.finalDate}</Text>
+                    <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
+                        <Text style={styles.removerButtonText}>Remover</Text>
+                    </TouchableOpacity>
+                </View>
+            ))}
         </View>
     )
 
@@ -126,7 +129,7 @@ const styles = StyleSheet.create({
         fontStyle: 'italic',
         fontSize: 18,
     },
-    container:{
-        alignItems:"center",
+    container: {
+        alignItems: "center",
     }
 });

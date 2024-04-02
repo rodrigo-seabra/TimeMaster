@@ -23,8 +23,20 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "permissions": [
+      "android.permission.READ_CALENDAR",
+      "android.permission.WRITE_CALENDAR"
+    ],
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "plugins": [
+      [
+        "expo-calendar",
+        {
+          "calendarPermission": "Nosso aplicativo precisa de permissão para acessar o calendário."
+        }
+      ]
+    ]
   }
 }

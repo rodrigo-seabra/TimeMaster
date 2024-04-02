@@ -1,5 +1,8 @@
 //Components do react native
-import { View, StyleSheet, TextInput, Text } from "react-native";
+import { View, StyleSheet, TextInput, Text, Alert } from "react-native";
+
+import { isValid, parse } from 'date-fns';
+
 //hooks do react
 import React, { useState } from "react";
 //importando o contexto de formulario
@@ -23,15 +26,14 @@ export default function FormComponent({
   };
 
   const handleSubmit = () => {
-    if ( formData.nome != "")
-    {
+   
+    if (formData.nome != "") {
       if (formData.nome.match(/^\D+$/) === null) {
         console.log("O nome deve conter apenas letras");
         return;
-      }  
+      }
     }
-    if( formData.senha != "")
-    {
+    if (formData.senha != "") {
       if (formData.senha !== formData.confirmSenha) {
         console.log("As senhas não conferem");
         return;

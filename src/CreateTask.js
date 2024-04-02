@@ -1,11 +1,10 @@
-import { Image, Text, View, StyleSheet, Switch, Keyboard } from "react-native";
-import React, { useState, useLayoutEffect, useContext } from "react";
-
+import { Image, Text, View, StyleSheet, Switch, Keyboard, Platform } from "react-native";
+import React, { useState, useLayoutEffect, useContext, useEffect } from "react";
+import * as Calendar from 'expo-calendar';
+import uuid from "react-native-uuid"
 import { Picker } from "@react-native-picker/picker";
-
 //para alteração relacionadas ao react native navigation
 import { useNavigation } from "@react-navigation/native";
-
 //Contexto e formulario
 import FormComponent from "./components/FormComponent";
 import { FormProvider } from "./context/FormContext";
@@ -16,8 +15,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CreateTask() {
   const { formData, updateFormData, resetFormData } = useFormContext();
-
-
+  async function getPermission() {
+    const { status } = await Calendar.requestCalendarPermissionsAsync();
+    if (status === 'granted') {
+      const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+    }
+  }
+  useEffect(() => {
+    getPermission()
+  }, [])
   //alterando a imagem do header do navigation
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -30,14 +36,11 @@ export default function CreateTask() {
       ),
     });
   }, [navigation]);
-
   //logica do switch
   const [isEnabled, setIsEnabled] = useState(false);
   const toggleSwitch = () => setIsEnabled((previousState) => !previousState);
-
   //informação do select
   const [selectedValue, setSelectedValue] = useState("Estudo");
-
   //msgError
   const [erro, setErro] = useState(false)
 
@@ -72,23 +75,57 @@ export default function CreateTask() {
 
   //função de salvar task
   async function salvarTask(formData) {
+    const defaultCalendarSource =
+      Platform.OS === 'ios'
+        ? await Calendar.getDefaultCalendarAsync()
+        : { isLocalAccount: true, name: 'Expo Calendar' };
+
+    //configuração de calendario
+    const newCalendarID = await Calendar.createCalendarAsync({
+      title: 'Expo Calendar',
+      color: 'red',
+      entityType: Calendar.EntityTypes.EVENT,
+      sourceId: defaultCalendarSource.id,
+      source: defaultCalendarSource,
+      name: 'internalCalendarName',
+      ownerAccount: 'personal',
+      accessLevel: Calendar.CalendarAccessLevel.OWNER,
+    });
+
+    let inicioDataHora = formData.intalDate.split(" ");
+    let inicioData = inicioDataHora[0].split("-")
+    let inicioHora = inicioDataHora[1].split(".")
+
+    let finalDataHora = formData.finalDate.split(" ");
+    let finalData = finalDataHora[0].split("-")
+    let finalHora = finalDataHora[1].split(".")
+
+
+    const newEvent = {
+      title: formData.nomeEvento,
+      startDate: new Date(inicioData[2], inicioData[1] - 1, inicioData[0], inicioHora[0], inicioHora[1]),
+      endDate: new Date(finalData[2], finalData[1] - 1, finalData[0], finalHora[0], finalHora[1]),
+      location: "Sesi",
+      notes: selectedValue,
+    }
+
     Keyboard.dismiss();
-    if (formData.nomeEvento !== "" && formData.intalDate && formData.finalDate) {
+      try{
+        await Calendar.createEventAsync(newCalendarID, newEvent)
+      }catch(err)
+      {
+        console.error('Erro ao adicionar evento:', error);
+      }
       const eventObject = {
         nomeEvento: formData.nomeEvento,
         initalDate: formData.intalDate,
         finalDate: formData.finalDate,
         type: selectedValue,
       };
+      adicionarEvento(eventObject);
       //Limpando os campos do form:
       resetFormData();
       // Adicionar o evento à lista de eventos
-      await adicionarEvento(eventObject);
-
-
-    } else {
-      setErro(true);
-    }
   }
 
   return (

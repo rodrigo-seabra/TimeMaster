@@ -43,7 +43,6 @@ export default function Home() {
       {bateria < 20 && (
         <MsgError bateria />
       )}
-      <Text>Bem vindo: {usuario.nome} </Text>
       <TopTasks />
       <View style={styles.filtroContainer}>
         <ListTask />
