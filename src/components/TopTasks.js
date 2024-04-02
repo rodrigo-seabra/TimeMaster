@@ -8,11 +8,9 @@ import { useState, useEffect, useLayoutEffect, useContext } from "react";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TopTasks() {
-    //exibindo eventos vindo da async storage
-    const [listaDeEventos, setListaDeEventos] = useState([]); //array com a lista do eventos
-    //exibindo os dados na tela
+    const [listaDeEventos, setListaDeEventos] = useState([]);
+
     useEffect(() => {
-        // Função para obter a lista de eventos da AsyncStorage
         const getListaDeEventos = async () => {
             try {
                 const lista = await AsyncStorage.getItem('listaDeEventos');
@@ -23,11 +21,9 @@ export default function TopTasks() {
                 console.error('Erro ao obter lista de eventos:', error);
             }
         };
-
-        // Chamar a função para obter a lista de eventos ao carregar a tela
         getListaDeEventos();
     }, [listaDeEventos]);
-    // Função para remover um evento da lista
+
     const removerEvento = async (index) => {
         try {
             let novaListaDeEventos = [...listaDeEventos];
@@ -39,6 +35,7 @@ export default function TopTasks() {
             console.error('Erro ao remover evento:', error);
         }
     };
+
     return (
         <View style={styles.topTasks}>
             <LinearGradient
@@ -69,6 +66,7 @@ export default function TopTasks() {
         </View>
     );
 }
+
 
 const styles = StyleSheet.create({
     topTasksEfects: {

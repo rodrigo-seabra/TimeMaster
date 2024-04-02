@@ -23,14 +23,19 @@ export default function FormComponent({
   };
 
   const handleSubmit = () => {
-    if (formData.nome.match(/^\D+$/) === null) {
-      console.log("O nome deve conter apenas letras");
-      return;
+    if ( formData.nome != "")
+    {
+      if (formData.nome.match(/^\D+$/) === null) {
+        console.log("O nome deve conter apenas letras");
+        return;
+      }  
     }
-  
-    if (formData.senha !== formData.confirmSenha) {
-      console.log("As senhas não conferem");
-      return;
+    if( formData.senha != "")
+    {
+      if (formData.senha !== formData.confirmSenha) {
+        console.log("As senhas não conferem");
+        return;
+      }
     }
     onSubmit(formData);
   };
