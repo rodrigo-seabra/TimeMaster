@@ -38,6 +38,15 @@ export const FormProvider = ({ children }) => {
       nome: "",
       email: "",
       senha: "",
+      confirmSenha: "",
+      nomeEvento: "",
+      intalDate: "",
+      finalDate: "",
+      numero: "",
+      rua: "",
+      cidade: "",
+      estado: "",
+      pais: "",
     });
   };
 

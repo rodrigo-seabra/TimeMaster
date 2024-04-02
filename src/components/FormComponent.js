@@ -16,7 +16,7 @@ export default function FormComponent({
   date,
   enventWithLocal,
 }) {
-  const { formData, updateFormData } = useFormContext();
+  const { formData, updateFormData, resetFormData } = useFormContext();
 
   const handleChange = (campo, valor) => {
     updateFormData(campo, valor);
@@ -38,6 +38,7 @@ export default function FormComponent({
       }
     }
     onSubmit(formData);
+    resetFormData();
   };
 
   return (
@@ -89,6 +90,8 @@ export default function FormComponent({
               style={styles.placeholder}
               placeholder="Nome do envento"
               value={formData.nomeEvento}
+              TextInput={formData.nomeEvento}
+
               onChangeText={(texto) => handleChange("nomeEvento", texto)}
             />
           </View>
@@ -97,6 +100,8 @@ export default function FormComponent({
               style={styles.placeholder}
               placeholder="Data de inicio"
               value={formData.intalDate}
+              TextInput={formData.intalDate}
+
               onChangeText={(texto) => handleChange("intalDate", texto)}
             />
           </View>
@@ -105,6 +110,7 @@ export default function FormComponent({
               style={styles.placeholder}
               placeholder="Data de término"
               value={formData.finalDate}
+              TextInput={formData.finalDate}
               onChangeText={(texto) => handleChange("finalDate", texto)}
             />
           </View>

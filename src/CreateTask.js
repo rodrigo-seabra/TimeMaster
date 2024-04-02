@@ -1,5 +1,5 @@
-import { Image, Text, View, StyleSheet, Switch } from "react-native";
-import React, { useState, useLayoutEffect } from "react";
+import { Image, Text, View, StyleSheet, Switch, Keyboard } from "react-native";
+import React, { useState, useLayoutEffect, useContext } from "react";
 
 import { Picker } from "@react-native-picker/picker";
 
@@ -9,11 +9,15 @@ import { useNavigation } from "@react-navigation/native";
 //Contexto e formulario
 import FormComponent from "./components/FormComponent";
 import { FormProvider } from "./context/FormContext";
+import { useFormContext } from "./context/FormContext";
 
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function CreateTask() {
+  const { formData, updateFormData, resetFormData } = useFormContext();
+
+
   //alterando a imagem do header do navigation
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -68,7 +72,7 @@ export default function CreateTask() {
 
   //função de salvar task
   async function salvarTask(formData) {
-    console.log(formData.nomeEvento, formData.intalDate, formData.finalDate);
+    Keyboard.dismiss();
     if (formData.nomeEvento !== "" && formData.intalDate && formData.finalDate) {
       const eventObject = {
         nomeEvento: formData.nomeEvento,
@@ -76,8 +80,12 @@ export default function CreateTask() {
         finalDate: formData.finalDate,
         type: selectedValue,
       };
+      //Limpando os campos do form:
+      resetFormData();
       // Adicionar o evento à lista de eventos
       await adicionarEvento(eventObject);
+
+
     } else {
       setErro(true);
     }
