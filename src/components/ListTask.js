@@ -10,24 +10,22 @@ export default function ListTask() {
     const [tipoEvento, setTipoEvento] = useState('');
     const [eventosFiltrados, setEventosFiltrados] = useState([]);
     const [listaDeEventos, setListaDeEventos] = useState([]); //array com a lista do eventos
+    const [filtro, setFiltro] = useState(false);
 
     const handleTipoEvento = (itemValue) => {
         setTipoEvento(itemValue);
+        setFiltro(itemValue !== ''); // Atualiza o estado do filtro com base no valor selecionado
         if (itemValue !== '') {
             const eventosFiltrados = listaDeEventos.filter((evento) => {
-                console.log('Tipo do evento:', evento.type);
-                console.log('Item selecionado:', itemValue);
                 return evento.type.toLowerCase() === itemValue.toLowerCase();
             });
-            console.log('Eventos filtrados:', eventosFiltrados);
             setEventosFiltrados(eventosFiltrados);
         } else {
             setEventosFiltrados(listaDeEventos); // Exibe todos os eventos se nenhum filtro for selecionado
         }
     };
-    //exibindo os dados na tela
+
     useEffect(() => {
-        // Função para obter a lista de eventos da AsyncStorage
         const getListaDeEventos = async () => {
             try {
                 const lista = await AsyncStorage.getItem('listaDeEventos');
@@ -38,50 +36,32 @@ export default function ListTask() {
                 console.error('Erro ao obter lista de eventos:', error);
             }
         };
-        // Chamar a função para obter a lista de eventos ao carregar a tela
         getListaDeEventos();
     }, [listaDeEventos]);
+
     const removerEvento = async (index) => {
         try {
             let novaListaDeEventos = [...listaDeEventos];
             novaListaDeEventos.splice(index, 1);
             setListaDeEventos(novaListaDeEventos);
-            Alert.alert(
-                'Excluir',
-                'Você tem certeza que deseja excluir?',
-                [
-                    {
-                        text: 'Cancelar',
-                        onPress: () => console.log('Cancelado'),
-                        style: 'cancel',
-                    },
-                    {
-                        text: 'Confirmar',
-                        onPress: async () => {
-                            console.log('Evento removido com sucesso!');
-                            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
-                            setListaDeEventos(novaListaDeEventos);
-                            Alert.alert('Sucesso', 'Evento removido com sucesso!');
-                        },
-                    },
-                ],
-                { cancelable: false }
-            );
+            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
+            setEventosFiltrados(novaListaDeEventos); // Atualiza os eventos filtrados após a remoção
+            Alert.alert('Sucesso', 'Evento removido com sucesso!');
         } catch (error) {
             console.error('Erro ao remover evento:', error);
             alert('Erro ao remover evento:', error);
         }
     };
 
-    //função para formatar a data por padrao
     const formatarData = (data) => {
         const date = new Date(data);
-        const dia = date.getDate();
-        const mes = date.getMonth() + 1;
-        const hora = date.getHours();
-        const minutos = date.getMinutes();
+        const dia = date.getDate().toString().padStart(2, '0');
+        const mes = (date.getMonth() + 1).toString().padStart(2, '0');
+        const hora = date.getHours().toString().padStart(2, '0');
+        const minutos = date.getMinutes().toString().padStart(2, '0');
         return `${dia}/${mes} ${hora}:${minutos}`;
     };
+
     return (
         <View style={styles.container}>
             <View style={styles.filtroContainer}>
@@ -98,7 +78,17 @@ export default function ListTask() {
                     <Picker.Item label="Evento em conjunto" value="Evento em conjunto" />
                 </Picker>
             </View>
-            {eventosFiltrados.map((evento, index) => (
+            {filtro ? eventosFiltrados.map((evento, index) => (
+                <View key={index} style={styles.evento}>
+                    <View style={styles.TextInfos}>
+                        <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
+                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formatarData(evento.initalDate)} - {formatarData(evento.finalDate)}</Text>
+                    </View>
+                    <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
+                        <MaterialCommunityIcons name="trash-can-outline" size={28} color="black" />
+                    </TouchableOpacity>
+                </View>
+            )) : listaDeEventos.map((evento, index) => (
                 <View key={index} style={styles.evento}>
                     <View style={styles.TextInfos}>
                         <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>

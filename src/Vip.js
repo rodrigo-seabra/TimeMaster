@@ -54,58 +54,58 @@ export default function Vip() {
     return (
         <View style={styles.container}>
             <View style={styles.consultContainer}>
-            <LinearGradient
-                colors={[
-                    "#8EFFA7",
-                    "#5CE97B",
-                    "#5CE97B",
-                    "#05BD2D",
-                ]}
-                style={styles.titleContainer}
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1, y: 0.5 }}
-            >
-                <MaterialCommunityIcons name="card-account-details-star-outline" color="#05BD2D" size={48} />
-                <Text style={styles.topTitle}>Consultoria</Text>
-            </LinearGradient>
-            <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
-                {consultorias.map((consultoria) => (
-                    <TouchableOpacity
-                        key={consultoria.id}
-                        style={styles.consultoria}
-                        onPress={() => handleConsultoriaPress(consultoria.id)}>
-                        <Image source={consultoria.image} style={styles.consultorImage} />
-                        <View style={styles.detalhes} >
-                            <Text style={styles.consultoriaTitle}>{consultoria.title}</Text>
-                            <TouchableOpacity style={styles.button}
-                                                    key={consultoria.id}
-                                                    onPress={() => handleConsultoriaPress(consultoria.id)}
-                            >
-                                <LinearGradient
-                                    colors={['#8EFFA7', '#5CE97B', '#5CE97B', '#05BD2D']}
-                                    style={styles.buttonGradient}
-                                    start={{ x: 0, y: 0.5 }}
-                                    end={{ x: 1, y: 0.5 }}>
-                                    <Text style={styles.buttonText}>Ver detalhes</Text>
-                                </LinearGradient>
-                            </TouchableOpacity>
+                <LinearGradient
+                    colors={[
+                        "#8EFFA7",
+                        "#5CE97B",
+                        "#5CE97B",
+                        "#05BD2D",
+                    ]}
+                    style={styles.titleContainer}
+                    start={{ x: 0, y: 0.5 }}
+                    end={{ x: 1, y: 0.5 }}
+                >
+                    <MaterialCommunityIcons name="card-account-details-star-outline" color="#05BD2D" size={48} />
+                    <Text style={styles.topTitle}>Consultoria</Text>
+                </LinearGradient>
+                <ScrollView style={styles.scrollContainer} contentContainerStyle={styles.scrollContent}>
+                    {consultorias.map((consultoria) => (
+                        <TouchableOpacity
+                            key={consultoria.id}
+                            style={styles.consultoria}
+                            onPress={() => handleConsultoriaPress(consultoria.id)}>
+                            <Image source={consultoria.image} style={styles.consultorImage} />
+                            <View style={styles.detalhes} >
+                                <Text style={styles.consultoriaTitle}>{consultoria.title}</Text>
+                                <TouchableOpacity style={styles.button}
+                                    key={consultoria.id}
+                                    onPress={() => handleConsultoriaPress(consultoria.id)}
+                                >
+                                    <LinearGradient
+                                        colors={['#8EFFA7', '#5CE97B', '#5CE97B', '#05BD2D']}
+                                        style={styles.buttonGradient}
+                                        start={{ x: 0, y: 0.5 }}
+                                        end={{ x: 1, y: 0.5 }}>
+                                        <Text style={styles.buttonText}>Ver detalhes</Text>
+                                    </LinearGradient>
+                                </TouchableOpacity>
+                            </View>
+                        </TouchableOpacity>
+                    ))}
+                </ScrollView>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => setModalVisible(false)}>
+                    <View style={styles.modalContainer}>
+                        <View style={styles.modalContent}>
+                            <Text style={styles.modalTitle}>{selectedConsultoria?.title}</Text>
+                            <Text style={styles.modalDescription}>{selectedConsultoria?.description}</Text>
+                            <Button title="Fechar" onPress={() => setModalVisible(false)} />
                         </View>
-                    </TouchableOpacity>
-                ))}
-            </ScrollView>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => setModalVisible(false)}>
-                <View style={styles.modalContainer}>
-                    <View style={styles.modalContent}>
-                        <Text style={styles.modalTitle}>{selectedConsultoria?.title}</Text>
-                        <Text style={styles.modalDescription}>{selectedConsultoria?.description}</Text>
-                        <Button title="Fechar" onPress={() => setModalVisible(false)} />
                     </View>
-                </View>
-            </Modal>
+                </Modal>
             </View>
 
         </View>
@@ -113,11 +113,11 @@ export default function Vip() {
 }
 
 const styles = StyleSheet.create({
-    consultContainer:{
+    consultContainer: {
         width: '100%',
-        justifyContent :'center',
+        justifyContent: 'center',
         alignItems: 'center',
-     },    
+    },
     container: {
         flex: 1,
         alignItems: 'center',
@@ -196,10 +196,10 @@ const styles = StyleSheet.create({
     scrollContainer: {
         width: '100%',
         marginTop: 50,
-      },
-      scrollContent: {
+    },
+    scrollContent: {
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'center',
-      },
+    },
 });

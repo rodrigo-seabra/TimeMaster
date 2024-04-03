@@ -126,7 +126,7 @@ export default function CreateTask() {
       initalDate: new Date(inicioData[2], inicioData[1] - 1, inicioData[0], inicioHora[0], inicioHora[1]),
       finalDate: new Date(finalData[2], finalData[1] - 1, finalData[0], finalHora[0], finalHora[1]),
       type: selectedValue,
-      contatoParceiroNome: contatoSelecionado.name,
+      contatoParceiroNome: contatoSelecionado ? contatoSelecionado.name : '',
     };
     adicionarEvento(eventObject);
     //Limpando os campos do form:
@@ -266,5 +266,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
-  
+
 });
