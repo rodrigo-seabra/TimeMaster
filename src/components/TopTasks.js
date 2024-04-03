@@ -9,6 +9,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TopTasks() {
     const [listaDeEventos, setListaDeEventos] = useState([]);
+   
 
     useEffect(() => {
         const getListaDeEventos = async () => {
@@ -72,15 +73,25 @@ export default function TopTasks() {
                     <MaterialCommunityIcons name="fire" style={styles.fire} />
                     <Text style={styles.MaisImportante}>+ Importantes hoje</Text>
                 </View>
-                {listaDeEventos.slice(0, 2).map((evento, index) => (
-                    <View key={index} style={styles.evento}>
-                        <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
-                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {evento.initalDate} - {evento.finalDate}</Text>
-                        <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
-                            <Text style={styles.removerButtonText}>Remover</Text>
-                        </TouchableOpacity>
-                    </View>
-                ))}
+                {listaDeEventos.slice(0, 2).map((evento, index) => {
+                    const initialDate = new Date(evento.initalDate);
+                    const finalDate = new Date(evento.finalDate);
+
+                    const formattedInitialDate = `${initialDate.getDate()}/${initialDate.getMonth() + 1} ${initialDate.getHours()}:${initialDate.getMinutes()}`;
+                    const formattedFinalDate = `${finalDate.getDate()}/${finalDate.getMonth() + 1} ${finalDate.getHours()}:${finalDate.getMinutes()}`;
+
+                    return (
+                        <View key={index} style={styles.evento}>
+                            <View style={styles.TextInfos}>
+                                <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
+                                <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formattedInitialDate} - {formattedFinalDate}</Text>
+                            </View>
+                            <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
+                                <MaterialCommunityIcons name="trash-can-outline" size={28} color="white" />
+                            </TouchableOpacity>
+                        </View>
+                    );
+                })}
             </LinearGradient>
         </View>
     );
@@ -89,45 +100,52 @@ export default function TopTasks() {
 
 const styles = StyleSheet.create({
     topTasksEfects: {
-        width: 310,
+        width: 315,
         height: 210,
         borderRadius: 5,
-      },
-      infos: {
+    },
+    infos: {
         display: "flex",
         flexDirection: "row",
         justifyContent: "center",
         alignItems: "center",
-      },
-      fire: {
+    },
+    fire: {
         fontSize: 50,
         color: "rgba(160, 69, 69, 1)",
-      },
-      topTasks: {
+    },
+    topTasks: {
         alignItems: "center",
-      },
-      MaisImportante: {
+    },
+    MaisImportante: {
         color: "white",
         fontSize: 24,
         fontWeight: "bold",
-      },
-      evento: {
+    },
+    evento: {
         marginBottom: 10,
         alignItems: 'center',
-      },
-      eventoNome: {
+        justifyContent: 'space-evenly',
+        flexDirection: 'row'
+    },
+    eventoNome: {
         color: 'white',
         fontSize: 20,
         fontWeight: '600',
-      },
-      tipoEvento: {
-    
+    },
+    tipoEvento: {
+
         fontWeight: 'normal',
         fontStyle: 'italic',
         fontSize: 18,
-      },
-      eventoData: {
+    },
+    eventoData: {
         color: 'white',
         fontSize: 14,
-      },
+    },
+    removerButton: {
+        backgroundColor: 'transparent',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+    },
 })

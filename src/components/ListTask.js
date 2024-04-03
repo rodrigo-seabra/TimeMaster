@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from "react-native";
 
 export default function ListTask() {
     const [tipoEvento, setTipoEvento] = useState('');
@@ -44,12 +45,42 @@ export default function ListTask() {
         try {
             let novaListaDeEventos = [...listaDeEventos];
             novaListaDeEventos.splice(index, 1);
-            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
             setListaDeEventos(novaListaDeEventos);
-            console.log('Evento removido com sucesso!');
+            Alert.alert(
+                'Excluir',
+                'Você tem certeza que deseja excluir?',
+                [
+                    {
+                        text: 'Cancelar',
+                        onPress: () => console.log('Cancelado'),
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirmar',
+                        onPress: async () => {
+                            console.log('Evento removido com sucesso!');
+                            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
+                            setListaDeEventos(novaListaDeEventos);
+                            Alert.alert('Sucesso', 'Evento removido com sucesso!');
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         } catch (error) {
             console.error('Erro ao remover evento:', error);
+            alert('Erro ao remover evento:', error);
         }
+    };
+
+    //função para formatar a data por padrao
+    const formatarData = (data) => {
+        const date = new Date(data);
+        const dia = date.getDate();
+        const mes = date.getMonth() + 1;
+        const hora = date.getHours();
+        const minutos = date.getMinutes();
+        return `${dia}/${mes} ${hora}:${minutos}`;
     };
     return (
         <View style={styles.container}>
@@ -69,10 +100,12 @@ export default function ListTask() {
             </View>
             {eventosFiltrados.map((evento, index) => (
                 <View key={index} style={styles.evento}>
-                    <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
-                    <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {evento.initalDate} - {evento.finalDate}</Text>
+                    <View style={styles.TextInfos}>
+                        <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
+                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formatarData(evento.initalDate)} - {formatarData(evento.finalDate)}</Text>
+                    </View>
                     <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
-                        <Text style={styles.removerButtonText}>Remover</Text>
+                        <MaterialCommunityIcons name="trash-can-outline" size={28} color="black" />
                     </TouchableOpacity>
                 </View>
             ))}
@@ -114,10 +147,7 @@ const styles = StyleSheet.create({
     listagem: {
         width: 240,
     },
-    evento: {
-        marginBottom: 10,
-        alignItems: 'center',
-    },
+
     eventoNome: {
         color: '#7E7E7E',
         fontSize: 20,
@@ -131,5 +161,16 @@ const styles = StyleSheet.create({
     },
     container: {
         alignItems: "center",
-    }
+    },
+    evento: {
+        marginBottom: 10,
+        alignItems: 'center',
+        justifyContent: 'space-evenly',
+        flexDirection: 'row'
+    },
+    removerButton: {
+        backgroundColor: 'transparent',
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+    },
 });

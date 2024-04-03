@@ -119,13 +119,14 @@ export default function CreateTask() {
     try {
       await Calendar.createEventAsync(newCalendarID, newEvent)
     } catch (err) {
-      console.error('Erro ao adicionar evento:', error);
+      console.error('Erro ao adicionar evento:', err);
     }
     const eventObject = {
       nomeEvento: formData.nomeEvento,
-      initalDate: formData.intalDate,
-      finalDate: formData.finalDate,
+      initalDate: new Date(inicioData[2], inicioData[1] - 1, inicioData[0], inicioHora[0], inicioHora[1]),
+      finalDate: new Date(finalData[2], finalData[1] - 1, finalData[0], finalHora[0], finalHora[1]),
       type: selectedValue,
+      contatoParceiroNome: contatoSelecionado.name,
     };
     adicionarEvento(eventObject);
     //Limpando os campos do form:
@@ -265,4 +266,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: "row",
   },
+  
 });
