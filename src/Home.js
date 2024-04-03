@@ -1,5 +1,7 @@
 import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, TextInput, } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import * as Network from 'expo-network';
+
 
 import { useState, useEffect, useLayoutEffect, useContext } from "react";
 import { useNavigation } from "@react-navigation/native";
@@ -17,6 +19,7 @@ import ListTask from "./components/ListTask";
 
 
 export default function Home() {
+  const [rede, setRede] = useState(false)
   const { usuario } = useContext(UserContext)
   const [bateria, setBateria] = useState()
   const batteryLevel = useBatteryLevel();
@@ -35,7 +38,20 @@ export default function Home() {
       ),
     });
   }, [navigation]);
+  async function getStatus() {
+    const status = await Network.getNetworkStateAsync()
+    if (status.type == "WIFI") {
+      setRede(true)
+    }
+  }
 
+  useEffect(() => {
+    getStatus()
+  }, [])
+
+  useEffect(() => {
+    getStatus()
+  }, [rede])
 
 
   return (
@@ -43,10 +59,20 @@ export default function Home() {
       {bateria < 20 && (
         <MsgError bateria />
       )}
-      <TopTasks />
-      <View style={styles.filtroContainer}>
-        <ListTask />
-      </View>
+      {!rede && (<MsgError internet />
+      )}
+      {rede && bateria >= 20 ? (
+        <View>
+          <TopTasks />
+          <ListTask />
+        </View>
+      ) : (
+        <View style={styles.container}>
+          <MsgError bateria /> 
+          <TopTasks />
+        </View>
+      )}
+
     </View>
   );
 }
@@ -56,5 +82,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#fff",
     padding: 20,
+    alignItems :'center',
   },
+  container: {
+    alignItems: 'center'
+  }
 });
