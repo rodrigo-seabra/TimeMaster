@@ -1,4 +1,4 @@
-import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, TextInput, } from "react-native";
+import { Text, View,  StyleSheet,  TouchableOpacity } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import { useState, useEffect } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -44,15 +44,30 @@ export default function ListTask() {
             let novaListaDeEventos = [...listaDeEventos];
             novaListaDeEventos.splice(index, 1);
             setListaDeEventos(novaListaDeEventos);
-            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
-            setEventosFiltrados(novaListaDeEventos); // Atualiza os eventos filtrados após a remoção
-            Alert.alert('Sucesso', 'Evento removido com sucesso!');
+            Alert.alert(
+                'Excluir',
+                'Você tem certeza que deseja excluir?',
+                [
+                    {
+                        text: 'Cancelar',
+                        style: 'cancel',
+                    },
+                    {
+                        text: 'Confirmar',
+                        onPress: async () => {
+                            await AsyncStorage.setItem('listaDeEventos', JSON.stringify(novaListaDeEventos));
+                            setListaDeEventos(novaListaDeEventos);
+                            Alert.alert('Sucesso', 'Evento removido com sucesso!');
+                        },
+                    },
+                ],
+                { cancelable: false }
+            );
         } catch (error) {
             console.error('Erro ao remover evento:', error);
             alert('Erro ao remover evento:', error);
         }
     };
-
     const formatarData = (data) => {
         const date = new Date(data);
         const dia = date.getDate().toString().padStart(2, '0');
@@ -82,7 +97,7 @@ export default function ListTask() {
                 <View key={index} style={styles.evento}>
                     <View style={styles.TextInfos}>
                         <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
-                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formatarData(evento.initalDate)} - {formatarData(evento.finalDate)}</Text>
+                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formatarData(evento.initialDate)} - {formatarData(evento.finalDate)}</Text>
                     </View>
                     <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
                         <MaterialCommunityIcons name="trash-can-outline" size={28} color="black" />
@@ -92,7 +107,7 @@ export default function ListTask() {
                 <View key={index} style={styles.evento}>
                     <View style={styles.TextInfos}>
                         <Text style={styles.eventoNome}>{evento.nomeEvento} - <Text style={styles.tipoEvento}>{evento.type}</Text></Text>
-                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formatarData(evento.initalDate)} - {formatarData(evento.finalDate)}</Text>
+                        <Text style={styles.eventoData}><MaterialCommunityIcons name="timer-outline" />  {formatarData(evento.initialDate)} - {formatarData(evento.finalDate)}</Text>
                     </View>
                     <TouchableOpacity onPress={() => removerEvento(index)} style={styles.removerButton}>
                         <MaterialCommunityIcons name="trash-can-outline" size={28} color="black" />

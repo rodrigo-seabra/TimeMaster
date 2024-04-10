@@ -1,7 +1,5 @@
 //Components do react native
-import { View, StyleSheet, TextInput, Text, Alert } from "react-native";
-
-import { isValid, parse } from 'date-fns';
+import { View, StyleSheet, TextInput } from "react-native";
 
 //hooks do react
 import React, { useState } from "react";
@@ -18,6 +16,8 @@ export default function FormComponent({
   mostrarConfirmarSenha,
   date,
   enventWithLocal,
+  selectedValue, 
+  contatoSelecionado
 }) {
   const { formData, updateFormData, resetFormData } = useFormContext();
 
@@ -26,7 +26,7 @@ export default function FormComponent({
   };
 
   const handleSubmit = () => {
-   
+
     if (formData.nome != "") {
       if (formData.nome.match(/^\D+$/) === null) {
         console.log("O nome deve conter apenas letras");
@@ -39,7 +39,7 @@ export default function FormComponent({
         return;
       }
     }
-    onSubmit(formData);
+    onSubmit(formData, selectedValue, contatoSelecionado );
     resetFormData();
   };
 
@@ -168,7 +168,7 @@ export default function FormComponent({
         </View>
       )}
       <View style={styles.btnSubmit}>
-        <Btn text={"Enviar"} onPress={handleSubmit} />
+        <Btn text={"Enviar"} onPress={() => handleSubmit()} />
       </View>
     </View>
   );

@@ -1,15 +1,17 @@
-import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from "react-native";
+import { Text, View,StyleSheet,  TouchableOpacity, Alert } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import * as Calendar from 'expo-calendar';
 
+import { useFormContext } from "../context/FormContext";
 //component para fazer uma box com gradiente
 import { LinearGradient } from "expo-linear-gradient";
-import { useState, useEffect, useLayoutEffect, useContext } from "react";
+import { useState, useEffect } from "react";
 //import async storage
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function TopTasks() {
     const [listaDeEventos, setListaDeEventos] = useState([]);
-   
+
 
     useEffect(() => {
         const getListaDeEventos = async () => {
@@ -74,7 +76,7 @@ export default function TopTasks() {
                     <Text style={styles.MaisImportante}>+ Importantes hoje</Text>
                 </View>
                 {listaDeEventos.slice(0, 2).map((evento, index) => {
-                    const initialDate = new Date(evento.initalDate);
+                    const initialDate = new Date(evento.initialDate);
                     const finalDate = new Date(evento.finalDate);
 
                     const formattedInitialDate = `${initialDate.getDate()}/${initialDate.getMonth() + 1} ${initialDate.getHours()}:${initialDate.getMinutes()}`;

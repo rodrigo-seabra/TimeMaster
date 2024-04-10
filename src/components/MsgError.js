@@ -1,8 +1,7 @@
-import { Text, View, Image, StyleSheet, FlatList, TouchableOpacity } from "react-native";
+import { Text, View,  StyleSheet } from "react-native";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 //component para fazer uma box com gradiente
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
 
 export default function MsgError({ bateria, internet }) {
     return (

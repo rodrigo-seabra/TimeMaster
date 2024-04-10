@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, Image, TouchableOpacity, Modal, Button, ScrollV
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
+import CustomHeader from './CustomHeader';
 
 const consultorias = [
     {
@@ -32,17 +33,7 @@ const consultorias = [
 ];
 
 export default function Vip() {
-    const navigation = useNavigation();
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: () => (
-                <Image
-                    source={require("../assets/photos/LogoInline.png")}
-                    style={{ width: 200, height: 70, marginLeft: 80 }}
-                />
-            ),
-        });
-    }, [navigation]);
+
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedConsultoria, setSelectedConsultoria] = useState(null);
 
@@ -53,6 +44,7 @@ export default function Vip() {
     };
     return (
         <View style={styles.container}>
+            
             <View style={styles.consultContainer}>
                 <LinearGradient
                     colors={[

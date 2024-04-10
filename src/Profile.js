@@ -7,24 +7,15 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import { LinearGradient } from "expo-linear-gradient";
 //contexto
 import { UserContext } from "./context/UserContext";
+import CustomHeader from "./CustomHeader";
 
 export default function Profile() {
     //context - user
     const { usuario } = useContext(UserContext)
-    //alterando header do navigation  
-    const navigation = useNavigation();
-    useLayoutEffect(() => {
-        navigation.setOptions({
-            headerTitle: () => (
-                <Image
-                    source={require("../assets/photos/LogoInline.png")}
-                    style={{ width: 200, height: 70, marginLeft: 80 }}
-                />
-            ),
-        });
-    }, [navigation]);
+
     return (
         <View style={styles.globalContaine}>
+            
             <Text style={styles.title}>Olá : {usuario.nome}</Text>
 
             <TouchableOpacity>
